@@ -9,6 +9,6 @@ numpy==1.26.3
 pandas==2.2.0
 streamlit==1.31.0
 requests==2.31.0
-pytest==8.0.0
+pytest==7.4.4
 pytest-asyncio==0.23.4
 httpx==0.26.0
