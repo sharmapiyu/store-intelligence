@@ -7,7 +7,7 @@ import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
 
-from .api_client import DashboardApiError, StoreIntelligenceClient
+from dashboard.api_client import DashboardApiError, StoreIntelligenceClient
 
 
 DEFAULT_API_BASE_URL = "http://localhost:8000"
