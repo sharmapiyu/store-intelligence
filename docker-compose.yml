@@ -1,0 +1,45 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: store-intelligence-api
+    environment:
+      DATABASE_URL: sqlite:////app/data/store_intelligence.db
+      YOLO_CONFIG_DIR: /app/.ultralytics
+    ports:
+      - "${API_PORT:-8000}:8000"
+    volumes:
+      - sqlite-data:/app/data
+    command:
+      - uvicorn
+      - app.main:app
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: store-intelligence-dashboard
+    environment:
+      PYTHONPATH: /app
+      API_BASE_URL: http://api:8000
+      STORE_ID: ${STORE_ID:-store-1}
+      DASHBOARD_REFRESH_SECONDS: ${DASHBOARD_REFRESH_SECONDS:-30}
+    ports:
+      - "${DASHBOARD_PORT:-8501}:8501"
+    depends_on:
+      - api
+    command:
+      - streamlit
+      - run
+      - dashboard/streamlit_app.py
+      - --server.address=0.0.0.0
+      - --server.port=8501
+      - --server.headless=true
+
+volumes:
+  sqlite-data:
